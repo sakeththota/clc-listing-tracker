@@ -1,0 +1,39 @@
+img {
+  width: 100px;
+  height: 100px;
+  z-index: 2;
+  margin-bottom: 10%;
+}
+
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  background-color: transparent;
+  border: none;
+  color: black;
+  padding: 16px 32px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition: 0.3s;
+  border-radius: 5%;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:hover {
+  color: white;
+}
+
+.fb:hover {
+  background-color: #405a9390;
+}
+.ou:hover {
+  background-color: #056c6e90;
+}
+.craigslist:hover {
+  background-color: #64449b90;
+}

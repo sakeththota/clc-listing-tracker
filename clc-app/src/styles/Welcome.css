@@ -1,0 +1,24 @@
+.Welcome {
+  text-align: center;
+}
+
+.Content {
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+
+.Marketplaces {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-evenly;
+  margin: 2.5% 2.5%;
+}
+
+.Dashboard {
+}

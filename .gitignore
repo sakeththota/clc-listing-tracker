@@ -1,0 +1,7 @@
+.DS_Store
+
+clc-api/node_modules
+clc-api/.env
+clc-api/dist
+
+clc-app/node_modules
