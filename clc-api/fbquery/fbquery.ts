@@ -105,7 +105,7 @@ export class FbQuery {
 
     // go to search terms link
     await page.goto(
-      `https://www.facebook.com/marketplace/${location}/search?minPrice=${min}&maxPrice=${max}${
+      `https://www.facebook.com/marketplace/${location}/search?deliveryMethod=local_pick_up&minPrice=${min}&maxPrice=${max}${
         condition !== "all" ? `&itemCondition=${condition}` : ""
       }&query=${searchTerm}&exact=false`
     );
