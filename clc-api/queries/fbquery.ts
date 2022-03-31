@@ -1,13 +1,6 @@
-import * as puppeteer from "puppeteer";
+import { Query } from "./query";
 import * as fs from "fs";
-import * as nodemailer from "nodemailer";
-import { Logger } from "../logger/logger";
-import * as dotenv from "dotenv";
-dotenv.config();
-
-interface pastItemsObj {
-  pastItems: any[];
-}
+import * as puppeteer from "puppeteer";
 
 interface resultObj {
   title: string;
@@ -15,45 +8,9 @@ interface resultObj {
   link: string;
 }
 
-export class FbQuery {
-  public pastItems: pastItemsObj;
-  public logger: Logger;
-  public transporter: nodemailer.Transporter;
-
+export class FbQuery extends Query {
   constructor() {
-    this.logger = new Logger();
-    this.transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
-      },
-    });
-    this.pastItems = { pastItems: [] };
-  }
-
-  private sendEmail(
-    terms: string[],
-    results: resultObj[],
-    recipient: string
-  ): void {
-    console.log(`to ${recipient}`);
-    let message: string = "New results below: \n\n";
-
-    for (const res of results) {
-      message += `${res.title} - $${res.price}\n${res.link}\n\n`;
-    }
-
-    const opts = {
-      from: process.env.GMAIL_USER,
-      to: recipient,
-      subject: `New Listings for ${terms}`,
-      text: message,
-    };
-
-    this.transporter.sendMail(opts, (err, info) => {
-      console.log(err ? err : "Email sent: " + info.response);
-    });
+    super("Facebook");
   }
 
   private async login(page: puppeteer.Page) {
@@ -75,7 +32,7 @@ export class FbQuery {
     }
   }
 
-  public async queryFbMarketplace(
+  public async query(
     terms: string[],
     location: string,
     min: number,
