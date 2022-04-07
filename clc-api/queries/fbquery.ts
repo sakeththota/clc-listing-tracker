@@ -10,6 +10,7 @@ interface resultObj {
 
 export class FbQuery extends Query {
   constructor() {
+    console.log("Facebook Query constructor");
     super("Facebook");
   }
 

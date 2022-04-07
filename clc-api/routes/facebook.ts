@@ -2,9 +2,8 @@ import { FbQuery } from "../queries/fbquery";
 import { QueryRoute } from "./queryRoute";
 
 class Facebook extends QueryRoute {
-  public fb: FbQuery;
-
   constructor() {
+    console.log("Facebook constructor");
     super(new FbQuery());
   }
 }

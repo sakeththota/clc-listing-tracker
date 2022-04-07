@@ -20,6 +20,7 @@ export abstract class Query {
   public name: string;
 
   constructor(name_in: string) {
+    console.log(`Query constructor w/ ${name_in}`);
     this.logger = new Logger();
     this.transporter = nodemailer.createTransport({
       service: "gmail",
