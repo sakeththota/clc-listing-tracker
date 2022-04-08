@@ -13,25 +13,6 @@ export class CraigQuery extends Query {
     super("Craigslist");
   }
 
-  private async login(page: puppeteer.Page) {
-    try {
-      // enter username
-      let craig_user: string = process.env.CRAIG_USER;
-      await page.focus("#inputEmailHandle");
-      await page.keyboard.type(craig_user);
-      // enter password
-      let craig_pass: string = process.env.CRAIG_PASS;
-      await page.focus("#inputPassword");
-      await page.keyboard.type(craig_pass);
-      // submit form
-      let submitButton = await page.$("#login");
-      await submitButton.click();
-    } catch (e) {
-      console.log("something went wrong when loggin in");
-      console.log(e);
-    }
-  }
-
   public async query(
     terms: string[],
     location: string,
@@ -46,73 +27,66 @@ export class CraigQuery extends Query {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page: puppeteer.Page = await browser.newPage();
-    await page.goto("https://accounts.craigslist.org/login");
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+    );
 
-    console.log("logging in");
-    await this.login(page);
-    console.log("logged in");
+    console.log("searching for " + terms);
+    let newItems: resultObj[] = [];
 
-    // console.log("searching for " + terms);
-    // let newItems: resultObj[] = [];
+    // replaces spaces in search terms with %20 to tack onto URLs
+    let searchTerm: string = terms.join(" ");
+    console.log(`\nResults for ${terms}:\n`);
 
-    // // replaces spaces in search terms with %20 to tack onto URLs
-    // let searchTerm: string = terms.join(" ");
-    // console.log(`\nResults for ${terms}:\n`);
-    // await page.screenshot({ path: "./ss1.png", fullPage: true });
+    // go to search terms link
 
-    // // go to search terms link
-    // await page.goto(
-    //   `https://www.facebook.com/marketplace/${location}/search?deliveryMethod=local_pick_up&minPrice=${min}&maxPrice=${max}${
-    //     condition !== "all" ? `&itemCondition=${condition}` : ""
-    //   }&query=${searchTerm}&exact=false`
-    // );
-    // await page.screenshot({ path: "./ss2.png", fullPage: true });
+    await page.goto(
+      `https://${location}.craigslist.org/search/sss?query=${searchTerm}&min_price=${min}&max_price=${max}&condition=10`
+    );
 
-    // let allItemsVisible = await page.$x('//div[@class="kbiprv82"]');
+    await page.waitForXPath(
+      '//ul[@id="search-results"]/li/div[@class="result-info"]/h3[@class="result-heading"]/a'
+    );
+    let links = await page.$x(
+      '//ul[@id="search-results"]/li/div[@class="result-info"]/h3[@class="result-heading"]/a'
+    );
+    let info = await page.evaluate((...links) => {
+      return links.map((e) => {
+        return {
+          link: e.href,
+          title: e.innerHTML,
+          price: "0",
+        };
+      });
+    }, ...links);
+    console.log(info);
 
-    // for (let i = 0; i < allItemsVisible.length; i++) {
-    //   let item = allItemsVisible[i];
-    //   let id = (
-    //     await item.$eval("a", (element) => element.getAttribute("href"))
-    //   ).split("/")[3];
-    //   console.log(id);
-    //   if (!this.pastItems.pastItems.includes(id)) {
-    //     let infoEl = await item.$x('.//div[@class="aahdfvyu fsotbgu8"]');
+    for (let i = 0; i < info.length; i++) {
+      let item = info[i];
+      let id: number = +item.link.split("/")[7].slice(0, -5);
 
-    //     let priceEl = (await infoEl[0].$x(".//*//*//*"))[0];
-    //     let price = (
-    //       await page.evaluate((x) => x.textContent, priceEl)
-    //     ).substring(1);
+      if (!this.pastItems.pastItems.includes(id)) {
+        this.pastItems.pastItems.push(id);
+        newItems.push(item);
+      }
+    }
 
-    //     let titleEl = (await infoEl[1].$x(".//*//*//*//*"))[0];
-    //     let title = await page.evaluate((x) => x.textContent, titleEl);
+    if (newItems.length > 0) {
+      this.sendEmail(terms, newItems, recipient);
+    } else {
+      console.log("No new items for " + terms);
+    }
 
-    //     let itemObj = {
-    //       link: `https://www.facebook.com/marketplace/item/${id}`,
-    //       price: price,
-    //       title: title,
-    //     };
-    //     this.pastItems.pastItems.push(id);
-    //     newItems.push(itemObj);
-    //   }
-    // }
+    await browser.close();
 
-    // if (newItems.length > 0) {
-    //   this.sendEmail(terms, newItems, recipient);
-    // } else {
-    //   console.log("No new items for " + terms);
-    // }
-
-    // await browser.close();
-
-    // fs.writeFile(
-    //   "./pastItems.json",
-    //   JSON.stringify(this.pastItems),
-    //   "utf-8",
-    //   function (err) {
-    //     if (err) throw err;
-    //     console.log("Updated past items");
-    //   }
-    // );
+    fs.writeFile(
+      "./pastItems.json",
+      JSON.stringify(this.pastItems),
+      "utf-8",
+      function (err) {
+        if (err) throw err;
+        console.log("Updated past items");
+      }
+    );
   }
 }
