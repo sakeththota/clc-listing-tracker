@@ -21,13 +21,13 @@ export class QueryRoute extends Route {
       console.log(JSON.stringify(req.body, null, 2));
       const { keywords, location, email, min, max, condition, interval } =
         req.body;
-      // let cronString = `*/${interval} * * * *`;
-      // cronitor.schedule(
-      //   `${keywords} every ${interval} minutes`,
-      //   cronString,
-      //   () =>
-      this.queryObj.query(keywords, location, min, max, email, condition);
-      // );
+      let cronString = `*/${interval} * * * *`;
+      cronitor.schedule(
+        `${keywords} every ${interval} minutes`,
+        cronString,
+        () =>
+          this.queryObj.query(keywords, location, min, max, email, condition)
+      );
       res.status(200).send({ status: "OK" });
     });
   }
