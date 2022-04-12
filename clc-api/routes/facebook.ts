@@ -4,7 +4,7 @@ import { QueryRoute } from "./queryRoute";
 class Facebook extends QueryRoute {
   constructor() {
     console.log("Facebook constructor");
-    super(new FbQuery());
+    super(new FbQuery(), "Facebook");
   }
 }
 

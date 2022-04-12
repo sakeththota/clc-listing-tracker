@@ -9,13 +9,12 @@ cronitor.wraps(nodeCron);
 
 export class QueryRoute extends Route {
   public queryObj: Query;
-
-  constructor(obj: Query) {
-    super();
+  constructor(obj: Query, name: string) {
+    super(name);
     this.queryObj = obj;
   }
 
-  protected routes(): void {
+  protected routes(type: string): void {
     this.express.post(`/`, (req, res) => {
       this.logger.info("url :: " + req.url);
       console.log(JSON.stringify(req.body, null, 2));
@@ -23,7 +22,7 @@ export class QueryRoute extends Route {
         req.body;
       let cronString = `*/${interval} * * * *`;
       cronitor.schedule(
-        `${keywords} every ${interval} minutes`,
+        `${type}: ${keywords} every ${interval} minutes`,
         cronString,
         () =>
           this.queryObj.query(keywords, location, min, max, email, condition)

@@ -3,7 +3,7 @@ import { QueryRoute } from "./queryRoute";
 
 class Craigslist extends QueryRoute {
   constructor() {
-    super(new CraigQuery());
+    super(new CraigQuery(), "Craigslist");
   }
 }
 

@@ -7,10 +7,10 @@ export abstract class Route {
   public express: express.Application;
   public logger: Logger;
 
-  constructor() {
+  constructor(type: string = "main") {
     this.express = express();
     this.middleware();
-    this.routes();
+    this.routes(type);
     this.logger = new Logger();
   }
 
@@ -20,5 +20,5 @@ export abstract class Route {
     this.express.use(cors());
   }
 
-  protected abstract routes(): void;
+  protected abstract routes(type: string): void;
 }
