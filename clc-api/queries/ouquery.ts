@@ -42,7 +42,7 @@ export class OUQuery extends Query {
     // go to search terms link
 
     await page.goto(
-      `https://offerup.com/search?q=${searchTerm}&condition=100&price_min=${min}&price_max=${max}$&delivery_param=p`
+      `https://offerup.com/search?q=${searchTerm}&condition=100&price_min=${min}&price_max=${max}$&delivery_param=p&sort=-posted`
     );
     await page.screenshot({ path: "./ss1.png", fullPage: true });
 

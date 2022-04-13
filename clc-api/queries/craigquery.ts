@@ -41,7 +41,7 @@ export class CraigQuery extends Query {
     // go to search terms link
 
     await page.goto(
-      `https://${location}.craigslist.org/search/sss?query=${searchTerm}&min_price=${min}&max_price=${max}&condition=10`
+      `https://${location}.craigslist.org/search/sss?query=${searchTerm}&min_price=${min}&max_price=${max}&condition=10&sort=date`
     );
 
     await page.waitForXPath(
