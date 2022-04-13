@@ -10,7 +10,7 @@ class Routes extends Route {
 
   protected routes(): void {
     // facebook query route
-    this.express.use("/facebook", Facebook);
+    // this.express.use("/facebook", Facebook);
     this.express.use("/offerup", Offerup);
     this.express.use("/craigslist", Craigslist);
   }
