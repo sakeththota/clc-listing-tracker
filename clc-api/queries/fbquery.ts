@@ -49,9 +49,9 @@ export class FbQuery extends Query {
     const page: puppeteer.Page = await browser.newPage();
     await page.goto("https://www.facebook.com/marketplace");
 
-    console.log("logging in");
-    await this.login(page);
-    console.log("logged in");
+    // console.log("logging in");
+    // await this.login(page);
+    // console.log("logged in");
 
     console.log("searching for " + terms);
     let newItems: resultObj[] = [];
@@ -67,6 +67,7 @@ export class FbQuery extends Query {
         condition !== "all" ? `&itemCondition=${condition}` : ""
       }&query=${searchTerm}&exact=false`
     );
+    await page.waitForTimeout(2000);
     await page.screenshot({ path: "./ss2.png", fullPage: true });
 
     let allItemsVisible = await page.$x('//div[@class="kbiprv82"]');
