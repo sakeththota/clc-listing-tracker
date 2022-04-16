@@ -17,7 +17,10 @@
 
 ## Key Features
 
--
+- Support for Facebook Marketplace, Offerup, and Craigslist
+- Dashboard for managing active queries
+
+**Coming Soon: History**
 
 ## How To Use
 
@@ -25,8 +28,6 @@ First, you will need to create a .env file like the one below with the necessary
 
 ```
 CRONITOR=
-FB_USER=
-FB_PASS=
 GMAIL_USER=
 GMAIL_PASS=
 PORT=3080
